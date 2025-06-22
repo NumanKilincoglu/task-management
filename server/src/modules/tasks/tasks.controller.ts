@@ -30,15 +30,14 @@ export class TasksController {
   ) {}
 
   @Get(':id')
-  getTask(@Param('id') id: string, @Req() req) {
+  async getTask(@Param('id') id: string, @Req() req: any) {
     const user = req.user;
-    return this.taskService.getTaskById(Number(id), user);
+    return await this.taskService.getTaskById(Number(id), req.user.userId);
   }
 
   @Get()
-  getTasks(@Query() filter: FilterTaskDto, @Req() req) {
-    const user = req.user;
-    return this.taskService.findAll(filter, user);
+  async getTasks(@Query() filter: FilterTaskDto, @Req() req: any) {
+    return await this.taskService.findAll(filter, req.user.userId);
   }
 
   @Post()
@@ -46,43 +45,33 @@ export class TasksController {
   async createTask(
     @UploadedFile() file: Express.Multer.File,
     @Body() body: CreateTaskDto,
-    @Req() req,
+    @Req() req: any,
   ) {
-    const user = req.user;
-
     if (file) {
-      const result = this.fileUploadService.handleFileUpload(file);
-      body.file_path = result.relativePath ?? undefined;
-      body.attachment_type = result.fileType ?? undefined;
-      body.file_name = result.fileName ?? undefined;
+      Object.assign(body, this.fileUploadService.handleFileUpload(file));
     }
 
-    return this.taskService.create(body, user);
+    return await this.taskService.create(body, req.user.userId);
   }
 
   @Put(':id')
   @UseInterceptors(FileInterceptor('attachment', multerConfig))
-  updateTask(
+  async updateTask(
     @UploadedFile() file: Express.Multer.File,
     @Param('id') id: string,
     @Body() body: UpdateTaskDto,
-    @Req() req,
+    @Req() req: any,
   ) {
-    const user = req.user;
-
     if (file) {
-      const result = this.fileUploadService.handleFileUpload(file);
-      body.file_path = result.relativePath ?? undefined;
-      body.attachment_type = result.fileType ?? undefined;
-      body.file_name = result.fileName ?? undefined;
+      Object.assign(body, this.fileUploadService.handleFileUpload(file));
     }
 
-    return this.taskService.update(Number(id), body, user);
+    return await this.taskService.update(Number(id), body, req.user.userId);
   }
 
   @Delete(':id')
-  deleteTask(@Param('id') id: string, @Req() req) {
+  async deleteTask(@Param('id') id: string, @Req() req: any) {
     const user = req.user;
-    return this.taskService.remove(Number(id), user);
+    return await this.taskService.remove(Number(id), req.user.userId);
   }
 }

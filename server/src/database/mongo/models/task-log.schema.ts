@@ -14,8 +14,8 @@ export class TaskLog {
   })
   action: string;
 
-  @Prop({ type: Object, required: false })
-  changes: Record<string, any>;
+  @Prop({ required: false })
+  changes: string;
 
   @Prop({ required: true })
   createdAt: Date;

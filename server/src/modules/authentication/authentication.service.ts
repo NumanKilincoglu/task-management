@@ -10,6 +10,7 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
+import { LoginResponseDto } from './dto/login-response.dto';
 
 @Injectable()
 export class AuthenticationService {
@@ -51,7 +52,7 @@ export class AuthenticationService {
     };
   }
 
-  async login(loginDto: LoginDto) {
+  async login(loginDto: LoginDto): Promise<LoginResponseDto> {
     const knex = this.knexService.getKnex();
 
     const user = await knex('users')
@@ -83,7 +84,7 @@ export class AuthenticationService {
 
     const { password, ...userWithoutPassword } = user;
     const accessToken = await this.jwtService.signAsync(payload);
-    
+
     //tokeni email keyiyle redise kaydettik
     await this.redis.set(user.email, accessToken);
 

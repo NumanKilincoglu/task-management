@@ -12,6 +12,7 @@ import { AuthenticationService } from './authentication.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtGuard } from '../../common/guards/jwt.guard';
+import { LoginResponseDto } from './dto/login-response.dto';
 
 @Controller('auth')
 export class AuthenticationController {
@@ -19,21 +20,21 @@ export class AuthenticationController {
 
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
-    return this.authService.register(registerDto);
+    return await this.authService.register(registerDto);
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto);
+  async login(@Body() loginDto: LoginDto): Promise<LoginResponseDto> {
+    return await this.authService.login(loginDto);
   }
 
   @Post('logout')
   @UseGuards(JwtGuard)
   @HttpCode(HttpStatus.OK)
-  async logout(@Request() req): Promise<{ message: string }> {
+  async logout(@Request() req: any): Promise<{ message: string }> {
     const token = req.headers.authorization?.replace('Bearer ', '');
     const userEmail = req.user.email;
-    return this.authService.logout(token, userEmail);
+    return await this.authService.logout(token, userEmail);
   }
 }

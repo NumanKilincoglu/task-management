@@ -7,6 +7,9 @@ import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
 import { LogService } from '../logs/log.service';
 import { MailService } from '../mails/mail.service';
+import { TaskResponseDto } from './dto/task-response.dto';
+import { TasksResponseDto } from './dto/tasks-response.dto';
+import { BaseResponseDto } from 'src/common/dto/base-response.dto';
 
 //cache timing
 const secondsTenRedis = 10;
@@ -21,30 +24,24 @@ export class TasksService {
     @InjectRedis() private readonly redis: Redis,
   ) {}
 
-  async getTaskById(id: number, user: { userId: number }) {
-    const baseUrl = process.env.BASE_URL || 'http://localhost:3001';
-    const cacheKey = `task:${user.userId}:${id}`;
+  async getTaskById(id: number, userId: number): Promise<TaskResponseDto> {
+    const cacheKey = `task:${userId}:${id}`;
     const cached = await this.redis.get(cacheKey);
 
-    if (cached) {
-      const cachedTask = JSON.parse(cached);
-      if (cachedTask.file_path) {
-        cachedTask.attachment_url = `${baseUrl}/${cachedTask.file_path}`;
-      }
-      return { success: true, task: cachedTask };
-    }
+    if (cached) return { success: true, task: JSON.parse(cached) };
 
     const knex = this.knexService.getKnex();
 
     const task = await knex('tasks')
       .select('*')
-      .where({ id, user_id: user.userId })
+      .where({ id, user_id: userId })
       .first();
 
     if (!task) {
       throw new NotFoundException('Task not found or not authorized');
     }
 
+    const baseUrl = process.env.BASE_URL || 'http://localhost:3001';
     if (task.file_path) {
       task.attachment_url = `${baseUrl}/${task.file_path}`;
     }
@@ -54,8 +51,11 @@ export class TasksService {
     return { success: true, task: task };
   }
 
-  async findAll(query: FilterTaskDto, user: { userId: number }) {
-    const cacheKey = `tasks:${user.userId}:${JSON.stringify(query)}`;
+  async findAll(
+    query: FilterTaskDto,
+    userId: number,
+  ): Promise<TasksResponseDto> {
+    const cacheKey = `tasks:${userId}:${JSON.stringify(query)}`;
 
     const cached = await this.redis.get(cacheKey);
     if (cached) {
@@ -67,7 +67,7 @@ export class TasksService {
     const limit = parseInt(query.limit ?? '10');
     const offset = (page - 1) * limit;
 
-    let q = knex('tasks').where({ user_id: user.userId });
+    let q = knex('tasks').where({ user_id: userId });
 
     if (query.searchQuery) {
       q = q.andWhereILike('title', query.searchQuery);
@@ -119,16 +119,16 @@ export class TasksService {
     return result;
   }
 
-  async create(body: CreateTaskDto, user: { userId: number }) {
+  async create(body: CreateTaskDto, userId: number): Promise<BaseResponseDto> {
     const knex = this.knexService.getKnex();
     const [id] = await knex('tasks').insert({
       ...body,
-      user_id: user.userId,
+      user_id: userId,
     });
 
     await this.logService.logTaskAction({
       taskId: id,
-      userId: user.userId,
+      userId: userId,
       action: 'created',
       changes: 'Task created',
       createdAt: new Date(),
@@ -137,11 +137,15 @@ export class TasksService {
     return { success: true, id };
   }
 
-  async update(id: number, body: UpdateTaskDto, user: { userId: number }) {
+  async update(
+    id: number,
+    body: UpdateTaskDto,
+    userId: number,
+  ): Promise<BaseResponseDto> {
     const knex = this.knexService.getKnex();
 
     const affected = await knex('tasks')
-      .where({ id, user_id: user.userId })
+      .where({ id, user_id: userId })
       .update({
         ...body,
         is_completed: body.is_completed == 'true',
@@ -151,12 +155,12 @@ export class TasksService {
       throw new NotFoundException('Task not found or not authorized');
     }
 
-    const cacheKey = `task:${user.userId}:${id}`;
+    const cacheKey = `task:${userId}:${id}`;
     await this.redis.del(cacheKey);
 
     await this.logService.logTaskAction({
       taskId: id,
-      userId: user.userId,
+      userId: userId,
       action: 'updated',
       changes: 'Task updated',
       createdAt: new Date(),
@@ -165,23 +169,23 @@ export class TasksService {
     return { success: true, id: id };
   }
 
-  async remove(id: number, user: { userId: number }) {
+  async remove(id: number, userId: number): Promise<BaseResponseDto> {
     const knex = this.knexService.getKnex();
 
     const affected = await knex('tasks')
-      .where({ id, user_id: user.userId })
+      .where({ id, user_id: userId })
       .delete();
 
     if (!affected) {
       throw new NotFoundException('Task not found or not authorized');
     }
 
-    const cacheKey = `task:${user.userId}:${id}`;
+    const cacheKey = `task:${userId}:${id}`;
     await this.redis.del(cacheKey);
 
     await this.logService.logTaskAction({
       taskId: id,
-      userId: user.userId,
+      userId: userId,
       action: 'deleted',
       changes: 'Task deleted',
       createdAt: new Date(),

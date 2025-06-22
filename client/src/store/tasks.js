@@ -67,6 +67,7 @@ export const useTasksStore = defineStore('tasks', () => {
   async function updateTask(id, task) {
     loading.value = true
     error.value = ''
+    tasks.value = [];
     try {
       const formData = new FormData()
 
@@ -96,6 +97,7 @@ export const useTasksStore = defineStore('tasks', () => {
   async function deleteTask(id) {
     loading.value = true
     error.value = ''
+    tasks.value = [];
     try {
       await axios.delete(`/tasks/${id}`)
       tasks.value = tasks.value.filter(t => t.id !== id)

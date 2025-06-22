@@ -22,10 +22,9 @@ export class FileUploadService {
     const relativePath = path.join('uploads', file.filename);
 
     return {
-      message: 'File uploaded successfully',
-      relativePath: relativePath,
-      fileType: file.mimetype,
-      fileName: file.filename,
+      file_path: relativePath,
+      attachment_type: file.mimetype,
+      file_name: file.filename,
     };
   }
 }
