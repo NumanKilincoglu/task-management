@@ -33,7 +33,7 @@ cd task-management
 cd server
 npm install
 npx knex migrate:latest --knexfile knexfile.js (Knex ile MySQL tablolarını oluşturur)
-npm run start:dev
+npm run start
 ```
 
 ### 3. Frontend’i Başlat
@@ -146,7 +146,7 @@ CREATE TABLE users (
 
 ### Anasayfa
 
-![Anasayfa Görüntüsü](./assets/dashboard.PNG)
+![Anasayfa Görüntüsü](./assets/dashboard.png)
 
 ---
 
