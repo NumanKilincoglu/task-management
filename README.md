@@ -43,6 +43,7 @@ cd client
 npm install
 npm run dev
 ```
+
 ---
 
 ## ⚙️ Ortam Değişkenleri (.env)
@@ -64,9 +65,9 @@ DB_NAME=task_manager
 
 ---
 
-##  Veritabanı Şeması
+## Veritabanı Şeması
 
-###  MySQL - `tasks` Tablosu
+### MySQL - `tasks` Tablosu
 
 ```sql
 CREATE TABLE tasks (
@@ -87,7 +88,9 @@ CREATE TABLE tasks (
 
 
 ```
-###  MySQL - `users` Tablosu
+
+### MySQL - `users` Tablosu
+
 ```sql
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -99,6 +102,7 @@ CREATE TABLE users (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 ```
+
 ---
 
 ### MongoDB Koleksiyonları
@@ -136,3 +140,42 @@ CREATE TABLE users (
 - 🧠 Redis cache ile görev önbellekleme ve JWT için doğrulama
 - 📬 Son tarihi yaklaşan görevler için hatırlatma e-postaları (gerçek gönderim değil, konsola yazdırılır)
 - 📜 MongoDB ile görev ve e-posta işlemleri için loglama
+
+
+## 🖼️ Ekran Görüntüleri
+
+### Anasayfa
+
+![Anasayfa Görüntüsü](./assets/dashboard.PNG)
+
+---
+
+### Görev Oluşturma
+
+![Görev Oluşturma Görüntüsü](./assets/create.png)
+
+---
+
+### Görev Düzenleme
+
+![Görev Oluşturma Görüntüsü](./assets/edit.png)
+
+---
+
+### Görev Detay
+
+![Görev Detay Görüntüsü](./assets/details.png)
+
+---
+
+### Giriş
+
+![Görev Detay Görüntüsü](./assets/login.png)
+
+---
+
+### Kayıt
+
+![Görev Detay Görüntüsü](./assets/register.png)
+
+---

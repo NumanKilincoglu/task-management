@@ -232,6 +232,6 @@ export class TasksService {
       });
     }
 
-    return { success: true, sentCount: tasks.length };
+    return { success: true };
   }
 }
