@@ -146,36 +146,36 @@ CREATE TABLE users (
 
 ### Anasayfa
 
-![Anasayfa Görüntüsü](./assets/dashboard.png)
+![](./assets/dashboard.PNG)
 
 ---
 
 ### Görev Oluşturma
 
-![Görev Oluşturma Görüntüsü](./assets/create.png)
+![](./assets/create.PNG)
 
 ---
 
 ### Görev Düzenleme
 
-![Görev Oluşturma Görüntüsü](./assets/edit.png)
+![](./assets/edit.PNG)
 
 ---
 
 ### Görev Detay
 
-![Görev Detay Görüntüsü](./assets/details.png)
+![](./assets/details.PNG)
 
 ---
 
 ### Giriş
 
-![Görev Detay Görüntüsü](./assets/login.png)
+![](./assets/login.PNG)
 
 ---
 
 ### Kayıt
 
-![Görev Detay Görüntüsü](./assets/register.png)
+![](./assets/register.PNG)
 
 ---
