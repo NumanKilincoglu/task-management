@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import axios from '../api/axios'
 import { ref } from 'vue'
 
+//task ile ilgili isler bu storeda yapilir (CRUD gibi.)
 export const useTasksStore = defineStore('tasks', () => {
   const tasks = ref([])
   const task = ref({})

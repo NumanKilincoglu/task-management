@@ -243,7 +243,6 @@ textarea {
     }
 }
 
-/* Dosya yükleme alanı ve mevcut dosya gösterimi için özel stiller */
 .existing-file {
     display: flex;
     align-items: center;

@@ -146,120 +146,8 @@ onMounted(getTask)
 </script>
 
 <style scoped>
-.task-form-wrapper {
-  min-height: 100vh;
-  padding: 2rem 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+@import '@/assets/common-form.css';
 
-.task-form-container {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  padding: 3rem;
-  max-width: 600px;
-  width: 100%;
-  backdrop-filter: blur(10px);
-}
-
-.form-header {
-  text-align: center;
-  margin-bottom: 2.5rem;
-}
-
-h2 {
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: #2d3748;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.form-subtitle {
-  color: #718096;
-  font-size: 1rem;
-  margin: 0;
-}
-
-.form-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-@media (max-width: 768px) {
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-}
-
-label {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-weight: 600;
-  color: #4a5568;
-  font-size: 0.9rem;
-}
-
-.label-text {
-  color: #2d3748;
-}
-
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.input-icon {
-  position: absolute;
-  right: 1rem;
-  font-size: 1.2rem;
-  color: #a0aec0;
-  pointer-events: none;
-}
-
-input,
-textarea {
-  width: 100%;
-  padding: 1rem 3rem 1rem 1rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  font-size: 1rem;
-  background: #f7fafc;
-  color: #2d3748;
-  cursor: default;
-}
-
-input:read-only,
-textarea:read-only {
-  background: #f7fafc;
-  color: #4a5568;
-  border-color: #e2e8f0;
-}
-
-textarea {
-  min-height: 120px;
-  resize: none;
-}
 
 .media-display {
   border: 2px solid #e2e8f0;
@@ -333,42 +221,6 @@ textarea {
   border-top: 1px solid #e2e8f0;
 }
 
-.btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 1.5rem;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
-  text-decoration: none;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-}
-
-.btn-secondary {
-  background: #f7fafc;
-  color: #4a5568;
-  border: 2px solid #e2e8f0;
-}
-
-.btn-secondary:hover {
-  background: #edf2f7;
-  border-color: #cbd5e0;
-}
-
 .btn-danger {
   background: linear-gradient(135deg, #e53e3e, #c53030);
   color: white;
@@ -380,22 +232,4 @@ textarea {
   box-shadow: 0 8px 25px rgba(229, 62, 62, 0.4);
 }
 
-.btn-icon {
-  font-size: 1.1rem;
-}
-
-@media (max-width: 640px) {
-  .task-form-container {
-    padding: 2rem 1.5rem;
-    margin: 1rem;
-  }
-
-  .form-actions {
-    flex-direction: column;
-  }
-
-  .btn {
-    justify-content: center;
-  }
-}
 </style>

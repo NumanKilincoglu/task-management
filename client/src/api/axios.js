@@ -17,6 +17,7 @@ instance.interceptors.request.use(config => {
   return config
 })
 
+//herhangi bir requestten 401(Unauthorized) donerse logine yonlendirmek icin interceptor
 instance.interceptors.response.use(
   response => response,
   error => {

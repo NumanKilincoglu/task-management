@@ -4,6 +4,7 @@ import Toast from '../components/Toast.vue'
 const toasts = ref([])
 let toastId = 0
 
+//toast menu icin composable gelen bildirimler ustu uste siralarir
 export function useToast() {
   const showToast = (options) => {
     const id = ++toastId

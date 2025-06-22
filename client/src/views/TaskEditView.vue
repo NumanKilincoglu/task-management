@@ -68,10 +68,10 @@
                                 <div class="file-icon">📎</div>
                                 <div class="file-info">
                                     <p class="file-name">
-                                      {{ task.attachment ? task.attachment.name : (task.file_name || 'Current Attachment') }}
+                                        {{ task.attachment ? task.attachment.name : (task.file_name || 'Current Attachment') }}
                                     </p>
                                     <p class="file-hint">
-                                      {{ task.attachment ? 'New file selected' : 'Click to change file' }}
+                                        {{ task.attachment ? 'New file selected' : 'Click to change file' }}
                                     </p>
                                 </div>
                             </div>
@@ -140,6 +140,10 @@ const dateModel = computed({
     set: val => { task.value.end_date = val }
 });
 
+function formatDateToInput(date) {
+    return new Date(date).toISOString().split('T')[0]
+}
+
 async function onSubmit() {
     try {
         const payload = {
@@ -163,11 +167,12 @@ async function onSubmit() {
     }
 }
 
-onMounted(getTask)
+onMounted(() => {
+    getTask();
+    task.value.end_date = formatDateToInput(new Date());
+});
 </script>
 
 <style>
 @import '@/assets/common-form.css';
-
-
 </style>

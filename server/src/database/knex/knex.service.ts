@@ -56,9 +56,7 @@ export class KnexService implements OnModuleInit, OnModuleDestroy {
       await this.knex.destroy();
       console.log('Database connection closed gracefully');
     } catch (error) {
-      console.error(
-        `Failed to close database connection: ${error.message}`,
-      );
+      console.error(`Failed to close database connection: ${error.message}`);
     }
   }
 }

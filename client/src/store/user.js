@@ -1,9 +1,9 @@
-// stores/user.js
 import { defineStore } from 'pinia'
 import axios from '../api/axios'
 import { ref } from 'vue'
 import router from '@/router'
 
+//user ile ilgili isler bu storeda yapilir (CRUD gibi.)
 export const useUserStore = defineStore('user', () => {
   const user = ref(null)
   const token = ref('')
@@ -60,6 +60,7 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  //logout oldugunda localstorageden user ve tokeni sil ardından logine yonlendir
   async function logout() {
     user.value = null
     token.value = '';
