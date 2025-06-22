@@ -4,20 +4,6 @@ Görev oluşturma, güncelleme, silme, tamamlama ve dosya yükleme işlemlerinin
 
 ---
 
-## 📁 Proje Yapısı
-
-```
-├── client/               # Vue 3 + Pinia frontend
-├── server/               # NestJS backend
-│   ├── modules/
-│   ├── database/
-│   │   ├── knex/         # MySQL yapılandırması
-│   │   └── mongo/        # MongoDB yapılandırması
-│   └── uploads/          # Yüklenen dosyalar
-```
-
----
-
 ## 🚀 Kurulum ve Çalıştırma Adımları
 
 ### 1. Depoyu Klonla
