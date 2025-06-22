@@ -1,6 +1,6 @@
 # ✅ Task Management System
 
-Görev oluşturma, güncelleme, silme, tamamlama ve dosya yükleme işlemlerinin yapılabildiği, loglama ve hatırlatma e-posta sistemleriyle desteklenen tam özellikli bir görev yönetim sistemi.
+Görev oluşturma, güncelleme, silme, tamamlama ve dosya yükleme işlemlerinin yapılabildiği, loglama, hatırlatma ve e-posta servisleri içeren görev yönetim sistemi.
 
 ---
 
