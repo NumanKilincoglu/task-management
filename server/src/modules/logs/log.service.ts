@@ -27,22 +27,21 @@ export class LogService {
     const page = parseInt(query.page ?? '1');
     const limit = parseInt(query.limit ?? '10');
     const offset = (page - 1) * limit;
-  
     const filter: any = {};
-  
-    if (query.searchQuery) {
-      filter.recipient = { $regex: query.searchQuery, $options: 'i' };
+
+    if (query.search) {
+      filter.recipient = { $regex: query.search, $options: 'i' };
     }
-  
+
     const total = await this.mailLogModel.countDocuments(filter);
-  
+
     const logs = await this.mailLogModel
       .find(filter)
       .sort({ sentAt: -1 })
       .skip(offset)
       .limit(limit)
       .exec();
-  
+
     return {
       success: true,
       logs,
@@ -60,14 +59,18 @@ export class LogService {
     const limit = parseInt(query.limit ?? '10');
     const offset = (page - 1) * limit;
     const total = await this.taskLogModel.countDocuments();
-  
+    const filter: any = {};
+    if (query.search) {
+      filter.action = { $regex: query.search, $options: 'i' };
+    }
+
     const logs = await this.taskLogModel
       .find()
       .sort({ sentAt: -1 })
       .skip(offset)
       .limit(limit)
       .exec();
-  
+
     return {
       success: true,
       logs,

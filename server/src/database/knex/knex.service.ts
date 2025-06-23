@@ -18,7 +18,7 @@ export class KnexService implements OnModuleInit, OnModuleDestroy {
         host: this.configService.get<string>('DB_HOST', 'localhost'),
         port: this.configService.get<number>('DB_PORT', 3306),
         user: this.configService.get<string>('DB_USER', 'root'),
-        password: this.configService.get<string>('DB_PASSWORD', ''),
+        password: this.configService.get<string>('DB_PASSWORD', 'pass'),
         database: this.configService.get<string>('DB_NAME', 'task_manager'),
       },
       pool: {
@@ -62,7 +62,7 @@ export class KnexService implements OnModuleInit, OnModuleDestroy {
   }
 
   //veritabani dockerda ayaga kalkarken tekrar baglanmayi dener
-  async waitForDatabaseReady(retries = 10, delay = 10000) {
+  async waitForDatabaseReady(retries = 15, delay = 10000) {
     for (let i = 0; i < retries; i++) {
       try {
         await this.knex.raw('SELECT 1');

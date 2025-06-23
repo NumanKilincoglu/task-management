@@ -6,7 +6,7 @@ services:
       - "5173:80"
     depends_on:
       - server
-
+   
   server:
     build:
       context: ./server
@@ -15,10 +15,13 @@ services:
     env_file:
       - ./server/.env
     depends_on:
-      - db
-      - redis
-      - mongo
-
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      mongo:
+        condition: service_started
+   
   db:
     image: mysql:8.0
     command: --sql-mode=""
@@ -29,16 +32,32 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-ppass"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+      start_period: 30s
+   
   redis:
     image: redis
     ports:
       - "6380:6379"
-
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+   
   mongo:
     image: mongo
     ports:
       - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
 volumes:
   mysql_data:
