@@ -52,6 +52,10 @@
             <Dropdown v-model="orderBySelection" :options="orderByOptions" placeholder="Order By" id="orderby"
               required />
           </div>
+
+          <div class="filter-group">
+            <Dropdown v-model="filterOptions.limit" :options="limitOptions" placeholder="Size" id="size" required />
+          </div>
         </div>
       </div>
 
@@ -96,7 +100,7 @@ import { useToast } from '../composables/useToast'
 import TaskCard from '@/components/TaskCard.vue'
 import PaginationBar from '@/components/PaginationBar.vue'
 import Dropdown from '@/components/Dropdown.vue'
-
+import { formatDateToInput } from '@/utils/dateUtils'
 const tasksStore = useTasksStore()
 const { success, error, warning } = useToast()
 
@@ -120,6 +124,13 @@ const orderByOptions = [
   { value: 'end_date-desc', label: 'End Date DESC' },
   { value: 'is_completed-desc', label: 'First Completed' },
   { value: 'is_completed-asc', label: 'Latest Completed' }
+]
+
+const limitOptions = [
+  { value: 5, label: 'Default Size 5' },
+  { value: 10, label: '10' },
+  { value: 20, label: '20' },
+  { value: 50, label: '50' }
 ]
 
 const filterOptions = ref({
@@ -174,7 +185,7 @@ async function onDelete(id) {
 async function onComplete(task) {
   try {
 
-    task.is_completed = true;
+    task.is_completed = 1;
     await tasksStore.updateTask(task.id, task)
     success('Task marked as completed!', 'Success', { duration: 3000 })
     fetchWithFilters()
@@ -190,7 +201,7 @@ watch(filterOptions.value, () => {
   debouncedFetch()
 })
 
-//debounce for handling requests
+//filtre degistikce surekli calismamasi icin delay fonksiyonu
 function debounce(fn, delay = 300) {
   let timeout
 

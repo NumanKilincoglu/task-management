@@ -8,7 +8,7 @@ import TaskCreateView from './views/TaskCreateView.vue'
 import TaskEditView from './views/TaskEditView.vue'
 
 const routes = [
-  { path: '/', redirect: '/tasks' },
+  { path: '/', redirect: '/login' },
   { path: '/login', component: LoginView },
   { path: '/register', component: RegisterView },
   { path: '/tasks', component: DashboardView },

@@ -11,16 +11,17 @@ services:
     build:
       context: ./server
     ports:
-      - "3001:3001"
+      - "3002:3002"
     env_file:
       - ./server/.env
     depends_on:
       - db
       - redis
       - mongo
-      
+
   db:
     image: mysql:8.0
+    command: --sql-mode=""
     environment:
       MYSQL_ROOT_PASSWORD: pass
       MYSQL_DATABASE: task_manager

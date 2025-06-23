@@ -69,7 +69,7 @@ export class TasksService {
     let q = knex('tasks').where({ user_id: userId });
 
     if (query.searchQuery) {
-      q = q.andWhereILike('title', query.searchQuery);
+      q = q.andWhereILike('title', `%${query.searchQuery}%`);
     }
 
     if (query.status) {
@@ -142,7 +142,7 @@ export class TasksService {
       .where({ id, user_id: userId })
       .update({
         ...body,
-        is_completed: body.is_completed == 'true',
+        is_completed: body.is_completed == '1',
       });
 
     if (!affected) {

@@ -29,13 +29,14 @@ export class KnexService implements OnModuleInit, OnModuleDestroy {
         directory: './src/database/knex/migrations',
         tableName: 'knex_migrations',
       },
+      acquireConnectionTimeout: 1000 * 60 * 60,
     });
   }
 
   async onModuleInit() {
     try {
       // Baglantiyi test et
-      await this.knex.raw('SELECT 1');
+      await this.waitForDatabaseReady();
       console.log('Successfully connected to MySQL database');
 
       // Migrationları calistir
@@ -58,5 +59,19 @@ export class KnexService implements OnModuleInit, OnModuleDestroy {
     } catch (error) {
       console.error(`Failed to close database connection: ${error.message}`);
     }
+  }
+
+  //veritabani dockerda ayaga kalkarken tekrar baglanmayi dener
+  async waitForDatabaseReady(retries = 10, delay = 8000) {
+    for (let i = 0; i < retries; i++) {
+      try {
+        await this.knex.raw('SELECT 1');
+        return;
+      } catch (err) {
+        Logger.warn(`Database not ready yet... (${i + 1}/${retries})`);
+        await new Promise((res) => setTimeout(res, delay));
+      }
+    }
+    throw new Error('Database not available after multiple retries.');
   }
 }

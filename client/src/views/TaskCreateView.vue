@@ -90,10 +90,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted  } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTasksStore } from '../store/tasks';
 import { useToast } from '../composables/useToast';
+import { formatDateToInput } from '@/utils/dateUtils';
 import Dropdown from '@/components/Dropdown.vue'
 
 const tasksStore = useTasksStore()
@@ -115,12 +116,8 @@ const form = ref({
 })
 
 onMounted(() => {
-  form.value.end_date = formatDateToInput(new Date())
+    form.value.end_date = formatDateToInput(new Date())
 })
-
-function formatDateToInput(date) {
-  return new Date(date).toISOString().split('T')[0]
-}
 
 function onFileChange(e) {
     const file = e.target.files[0];

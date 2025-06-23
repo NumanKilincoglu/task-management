@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar">
         <div class="navbar-left">
-            <router-link to="/tasks" class="navbar-logo">TaskApp</router-link>
+            <router-link to="/tasks" class="navbar-logo">ShipEntegra</router-link>
         </div>
         <div class="navbar-right">
             <div class="user-info">

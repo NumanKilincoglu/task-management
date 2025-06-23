@@ -16,7 +16,7 @@
             </div>
             <div class="task-due-date">
                 <span class="due-icon">📅</span>
-                <span class="due-text">{{ new Date(task?.end_date).toLocaleDateString('tr-TR') }}</span>
+                <span class="due-text">{{ formatDateToInput(task?.end_date) }}</span>
             </div>
         </div>
         <div class="task-actions">
@@ -41,6 +41,8 @@
 </template>
 
 <script setup>
+import { formatDateToInput } from "../utils/dateUtils";
+
 const props = defineProps({
     task: { type: Object, required: true }
 })
@@ -196,8 +198,7 @@ function getPriorityLabel(priority) {
 }
 
 .btn-complete:hover {
-  background: #38a169;
-  color: white;
+    background: #38a169;
+    color: white;
 }
-
 </style>
