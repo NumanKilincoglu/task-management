@@ -6,6 +6,7 @@ import DashboardView from './views/DashboardView.vue'
 import TaskDetailView from './views/TaskDetailView.vue'
 import TaskCreateView from './views/TaskCreateView.vue'
 import TaskEditView from './views/TaskEditView.vue'
+import LogView from './views/LogView.vue'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -15,6 +16,7 @@ const routes = [
   { path: '/tasks/create', component: TaskCreateView },
   { path: '/tasks/:id', component: TaskDetailView },
   { path: '/tasks/:id/edit', component: TaskEditView },
+  { path: '/logs', component: LogView },
 ]
 
 const router = createRouter({

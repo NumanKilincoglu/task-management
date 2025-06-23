@@ -67,7 +67,6 @@ export const useUserStore = defineStore('user', () => {
     try {
       await axios.post('/auth/logout');
       router.push('/login')
-      return true
     } catch (err) {
       error.value = err.response?.data?.message || 'Logout failed'
       return false

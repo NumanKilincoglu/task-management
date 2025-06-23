@@ -142,6 +142,12 @@ CREATE TABLE users (
 
 ---
 
+### Log Ekranı
+
+![](./assets/logs.PNG)
+
+---
+
 ### Giriş
 
 ![](./assets/login.PNG)

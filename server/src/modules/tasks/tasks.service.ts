@@ -10,7 +10,7 @@ import { TasksResponseDto } from './dto/tasks-response.dto';
 import { BaseResponseDto } from 'src/common/dto/base-response.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-
+import { env } from 'process';
 //cache timing
 const MS_500 = 500;
 
@@ -40,7 +40,7 @@ export class TasksService {
       throw new NotFoundException('Task not found or not authorized');
     }
 
-    const baseUrl = process.env.BASE_URL || 'http://localhost:3001';
+    const baseUrl = env.BASE_URL || 'http://localhost:3002';
     if (task.file_path) {
       task.attachment_url = `${baseUrl}/${task.file_path}`;
     }

@@ -35,7 +35,7 @@ export const useTasksStore = defineStore('tasks', () => {
     loading.value = true
     error.value = ''
 
-    //file gondermek icin formData sekline cevirdim
+    //dosya gondermek icin formData sekline cevirdim
     try {
       const formData = new FormData();
 

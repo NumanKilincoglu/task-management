@@ -62,7 +62,7 @@ export class KnexService implements OnModuleInit, OnModuleDestroy {
   }
 
   //veritabani dockerda ayaga kalkarken tekrar baglanmayi dener
-  async waitForDatabaseReady(retries = 10, delay = 8000) {
+  async waitForDatabaseReady(retries = 10, delay = 10000) {
     for (let i = 0; i < retries; i++) {
       try {
         await this.knex.raw('SELECT 1');

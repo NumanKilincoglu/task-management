@@ -111,7 +111,7 @@ const form = ref({
     title: '',
     description: '',
     priority: '',
-    end_date: '',
+    end_date: new Date(),
     attachment: null
 })
 

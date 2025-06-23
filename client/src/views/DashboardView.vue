@@ -101,6 +101,7 @@ import TaskCard from '@/components/TaskCard.vue'
 import PaginationBar from '@/components/PaginationBar.vue'
 import Dropdown from '@/components/Dropdown.vue'
 import { formatDateToInput } from '@/utils/dateUtils'
+import {debounce} from "../utils/helpers";
 const tasksStore = useTasksStore()
 const { success, error, warning } = useToast()
 
@@ -201,17 +202,6 @@ watch(filterOptions.value, () => {
   debouncedFetch()
 })
 
-//filtre degistikce surekli calismamasi icin delay fonksiyonu
-function debounce(fn, delay = 300) {
-  let timeout
-
-  return function (...args) {
-    clearTimeout(timeout)
-    timeout = setTimeout(() => {
-      fn.apply(this, args)
-    }, delay)
-  }
-}
 
 const debouncedFetch = debounce(fetchWithFilters, 1000)
 </script>
@@ -219,7 +209,7 @@ const debouncedFetch = debounce(fetchWithFilters, 1000)
 <style scoped>
 .dashboard-wrapper {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: transparent;
   width: 100%;
   padding: 2.5rem;
 }

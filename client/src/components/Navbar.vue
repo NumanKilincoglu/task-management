@@ -3,12 +3,14 @@
         <div class="navbar-left">
             <router-link to="/tasks" class="navbar-logo">ShipEntegra</router-link>
         </div>
-        <div class="navbar-right">
+        <div v-if="userStore?.user" class="navbar-right">
+            <router-link to="/tasks" class="navbar-link">Tasks</router-link>
+            <router-link to="/logs" class="navbar-link">Logs</router-link>
             <div class="user-info">
                 <img :src="avatarUrl" alt="User Avatar" class="user-avatar" />
                 <span class="user-name">{{ userName }}</span>
             </div>
-            <button v-if="userStore?.user" class="logout-btn" @click="onLogout">
+            <button class="logout-btn" @click="onLogout">
                 <span class="btn-icon">🚪</span>
                 Logout
             </button>
@@ -86,21 +88,37 @@ async function onLogout() {
 }
 
 .logout-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: #e53e3e;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: #e53e3e;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .logout-btn:hover {
-  background: #c53030;
-  transform: translateY(-2px);
+    background: #c53030;
+    transform: translateY(-2px);
+}
+
+.navbar-link {
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    margin-right: 1rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.navbar-link.router-link-exact-active,
+.navbar-link.router-link-active {
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffe082;
 }
 </style>

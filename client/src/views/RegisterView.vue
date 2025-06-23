@@ -5,42 +5,42 @@
       <p class="auth-subtitle">Create your account to get started.</p>
       <form @submit.prevent="onRegister" class="auth-form">
         <div class="auth-form-group">
-          <label for="name">Name</label>
           <div class="auth-input-wrapper">
-            <span class="auth-input-icon">👤</span>
-            <input v-model="userCredentials.name" type="text" id="name" class="auth-input" placeholder="Enter your name" required />
+            <input v-model="userCredentials.name" type="text" id="name" class="auth-input" placeholder="Enter your name"
+              required />
           </div>
         </div>
         <div class="auth-form-group">
           <label for="email">Email</label>
           <div class="auth-input-wrapper">
-            <span class="auth-input-icon">✉️</span>
-            <input v-model="userCredentials.email" type="email" id="email" class="auth-input" placeholder="Enter your email" required />
+            <input v-model="userCredentials.email" type="email" id="email" class="auth-input"
+              placeholder="Enter your email" required />
           </div>
         </div>
         <div class="auth-form-group">
           <label for="phone">Phone</label>
           <div class="auth-input-wrapper">
-            <span class="auth-input-icon">📱</span>
-            <input v-model="userCredentials.phone" type="tel" id="phone" class="auth-input" placeholder="Enter your phone" required />
+            <input v-model="userCredentials.phone" type="tel" id="phone" class="auth-input"
+              placeholder="Enter your phone" required />
           </div>
         </div>
         <div class="auth-form-group">
           <label for="password">Password</label>
           <div class="auth-input-wrapper">
-            <span class="auth-input-icon">🔒</span>
-            <input v-model="userCredentials.password" type="password" id="password" class="auth-input" placeholder="Create a password" required />
+            <input v-model="userCredentials.password" type="password" id="password" autocomplete="password"
+              class="auth-input" placeholder="Create a password" required />
           </div>
         </div>
         <div class="auth-form-group">
           <label for="confirmPassword">Confirm Password</label>
           <div class="auth-input-wrapper">
-            <span class="auth-input-icon">🔒</span>
-            <input v-model="userCredentials.confirmPassword" type="password" id="confirmPassword" class="auth-input" placeholder="Confirm your password" required />
+            <input v-model="userCredentials.confirmPassword" type="password" autocomplete="confirm-password"
+              id="confirmPassword" class="auth-input" placeholder="Confirm your password" required />
           </div>
         </div>
         <button type="submit" class="auth-btn">Register</button>
-        <p v-if="userCredentials.password && userCredentials.confirmPassword && userCredentials.password !== userCredentials.confirmPassword" class="auth-warning">
+        <p v-if="userCredentials.password && userCredentials.confirmPassword && userCredentials.password !== userCredentials.confirmPassword"
+          class="auth-warning">
           Passwords do not match.
         </p>
         <p class="auth-switch-link">

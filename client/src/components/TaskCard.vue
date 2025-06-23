@@ -32,7 +32,7 @@
                 <span class="action-icon">🗑️</span>
                 <span class="action-text">Delete</span>
             </button>
-            <button v-if="!task.completed" class="action-btn btn-complete" @click="$emit('complete', task)">
+            <button v-if="!task.is_completed" class="action-btn btn-complete" @click="$emit('complete', task)">
                 <span class="action-icon">✅</span>
                 <span class="action-text">Complete</span>
             </button>
@@ -79,8 +79,31 @@ function getPriorityLabel(priority) {
 }
 
 .task-completed {
-    opacity: 0.7;
-    background: #f7fafc;
+    opacity: 1;
+    background: #e2e8f0;
+    color: #a0aec0;
+    border: 2px solid #cbd5e1;
+}
+
+.task-completed .task-title {
+    text-decoration: line-through;
+    color: #a0aec0;
+}
+
+.task-completed .task-status.status-completed {
+    background: #f1f5f9;
+    color: #a0aec0;
+}
+
+.task-completed .task-meta,
+.task-completed .task-priority,
+.task-completed .task-due-date,
+.task-completed .action-btn {
+    color: #a0aec0;
+}
+
+.task-completed .action-btn {
+    background: #f1f5f9;
 }
 
 .task-header {

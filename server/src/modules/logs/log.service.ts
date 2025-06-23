@@ -22,4 +22,61 @@ export class LogService {
     const newLog = new this.taskLogModel(data);
     return await newLog.save();
   }
+
+  async findAllMailLogs(query: any) {
+    const page = parseInt(query.page ?? '1');
+    const limit = parseInt(query.limit ?? '10');
+    const offset = (page - 1) * limit;
+  
+    const filter: any = {};
+  
+    if (query.searchQuery) {
+      filter.recipient = { $regex: query.searchQuery, $options: 'i' };
+    }
+  
+    const total = await this.mailLogModel.countDocuments(filter);
+  
+    const logs = await this.mailLogModel
+      .find(filter)
+      .sort({ sentAt: -1 })
+      .skip(offset)
+      .limit(limit)
+      .exec();
+  
+    return {
+      success: true,
+      logs,
+      meta: {
+        page,
+        total,
+        totalPages: Math.ceil(total / limit),
+        limit,
+      },
+    };
+  }
+
+  async findAllTaskLogs(query: any) {
+    const page = parseInt(query.page ?? '1');
+    const limit = parseInt(query.limit ?? '10');
+    const offset = (page - 1) * limit;
+    const total = await this.taskLogModel.countDocuments();
+  
+    const logs = await this.taskLogModel
+      .find()
+      .sort({ sentAt: -1 })
+      .skip(offset)
+      .limit(limit)
+      .exec();
+  
+    return {
+      success: true,
+      logs,
+      meta: {
+        page,
+        total,
+        totalPages: Math.ceil(total / limit),
+        limit,
+      },
+    };
+  }
 }

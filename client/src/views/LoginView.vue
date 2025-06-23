@@ -7,15 +7,14 @@
         <div class="auth-form-group">
           <label for="email">Email</label>
           <div class="auth-input-wrapper">
-            <span class="auth-input-icon">✉️</span>
             <input v-model="email" type="email" id="email" class="auth-input" placeholder="Enter your email" required />
           </div>
         </div>
         <div class="auth-form-group">
           <label for="password">Password</label>
           <div class="auth-input-wrapper">
-            <span class="auth-input-icon">🔒</span>
-            <input v-model="password" type="password" id="password" class="auth-input" placeholder="Enter your password" required />
+            <input v-model="password" autocomplete="password" type="password" id="password" class="auth-input"
+              placeholder="Enter your password" required />
           </div>
         </div>
         <button type="submit" class="auth-btn" :disabled="userStore.loading">

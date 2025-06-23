@@ -6,10 +6,15 @@
                 Previous
             </button>
             <div class="page-numbers">
-                <button v-for="page in totalPages" :key="page" class="page-btn"
+                <button v-if="pages[0] > 1" class="page-btn" @click="$emit('change', 1)">1</button>
+                <span v-if="pages[0] > 2" class="ellipsis">...</span>
+                <button v-for="page in pages" :key="page" class="page-btn"
                     :class="{ 'page-active': page === currentPage }" @click="$emit('change', page)">
                     {{ page }}
                 </button>
+                <span v-if="pages[pages.length - 1] < totalPages - 1" class="ellipsis">...</span>
+                <button v-if="pages[pages.length - 1] < totalPages" class="page-btn"
+                    @click="$emit('change', totalPages)">{{ totalPages }}</button>
             </div>
             <button class="pagination-btn" :disabled="currentPage === totalPages"
                 @click="$emit('change', currentPage + 1)">
@@ -17,13 +22,38 @@
                 <span class="pagination-icon">▶</span>
             </button>
         </div>
+        <div class="pagination-info">
+            Page {{ currentPage }} of {{ totalPages }}<span v-if="totalCount !== undefined"> • {{ totalCount }}
+                results</span>
+        </div>
     </div>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 const props = defineProps({
     currentPage: { type: Number, required: true },
-    totalPages: { type: Number, required: true }
+    totalPages: { type: Number, required: true },
+    totalCount: { type: Number, required: false }
+})
+
+const maxVisible = 6
+
+//sadece 6 adet sayi gorunecek pagination barda
+const pages = computed(() => {
+    const pages = []
+    if (props.totalPages <= maxVisible) {
+        for (let i = 1; i <= props.totalPages; i++) pages.push(i)
+    } else {
+        let start = Math.max(1, props.currentPage - Math.floor(maxVisible / 2))
+        let end = start + maxVisible - 1
+        if (end > props.totalPages) {
+            end = props.totalPages
+            start = end - maxVisible + 1
+        }
+        for (let i = start; i <= end; i++) pages.push(i)
+    }
+    return pages
 })
 </script>
 
@@ -41,6 +71,14 @@ const props = defineProps({
     justify-content: center;
     align-items: center;
     gap: 1rem;
+}
+
+.pagination-info {
+    margin-top: 0.5rem;
+    text-align: center;
+    color: #4a5568;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 .pagination-btn {
@@ -70,6 +108,7 @@ const props = defineProps({
 .page-numbers {
     display: flex;
     gap: 0.5rem;
+    align-items: center;
 }
 
 .page-btn {
@@ -93,6 +132,13 @@ const props = defineProps({
     background: #667eea;
     color: white;
     border-color: #667eea;
+}
+
+.ellipsis {
+    padding: 0 0.5rem;
+    color: #a0aec0;
+    font-size: 1.2rem;
+    user-select: none;
 }
 
 @media (max-width: 768px) {

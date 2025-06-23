@@ -43,7 +43,7 @@
               <span class="label-text">Due Date</span>
             </label>
             <div class="input-wrapper">
-              <input :value="formatDateToInput(task.end_date ?? new Date)" type="text" readonly />
+              <input :value="formatDateToInput(task?.end_date)" type="text" readonly />
               <div class="input-icon">📅</div>
             </div>
           </div>
@@ -71,7 +71,8 @@
               <video :src="task.attachment_url" controls class="media-preview"></video>
             </div>
             <div v-else class="media-item">
-              <a target="_blank" :href="task.attachment_url" :download="task.file_name || 'attachment'" class="file-download">
+              <a target="_blank" :href="task.attachment_url" :download="task.file_name || 'attachment'"
+                class="file-download">
                 <div class="file-icon">📎</div>
                 <div class="file-info">
                   <span class="file-name">{{ task.file_name || 'Download Attachment' }}</span>
@@ -107,7 +108,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useTasksStore } from '../store/tasks'
 import { storeToRefs } from 'pinia'
 import { useToast } from '../composables/useToast'
-import {formatDateToInput} from "../utils/dateUtils";
+import { formatDateToInput } from "../utils/dateUtils";
 
 const route = useRoute()
 const router = useRouter()
@@ -232,5 +233,4 @@ onMounted(getTask)
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(229, 62, 62, 0.4);
 }
-
 </style>

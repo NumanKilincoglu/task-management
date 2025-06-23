@@ -42,7 +42,8 @@ const props = defineProps({
   },
   message: {
     type: String,
-    required: true
+    required: false,
+    default : ''
   },
   duration: {
     type: Number,
@@ -72,7 +73,6 @@ const startProgress = () => {
   if (!props.showProgress) return
 
   const startTime = Date.now()
-  const endTime = startTime + props.duration
 
   progressInterval = setInterval(() => {
     const now = Date.now()
