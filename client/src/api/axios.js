@@ -3,7 +3,7 @@ import router from '../router'
 import { useToast } from '../composables/useToast'
 
 const instance = axios.create({
-  baseURL: 'http://localhost:3001',
+  baseURL: 'http://localhost:3002',
   headers: {
     'Content-Type': 'application/json',
   },

@@ -2,21 +2,24 @@ import {
   Injectable,
   UnauthorizedException,
   ConflictException,
+  Inject,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { KnexService } from '../../database/knex/knex.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { InjectRedis } from '@nestjs-modules/ioredis';
-import Redis from 'ioredis';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 import { LoginResponseDto } from './dto/login-response.dto';
+
+const TimeInSeconds = 1000 * 60 * 60 * 24;
 
 @Injectable()
 export class AuthenticationService {
   constructor(
     private readonly knexService: KnexService,
-    @InjectRedis() private readonly redis: Redis,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -86,7 +89,7 @@ export class AuthenticationService {
     const accessToken = await this.jwtService.signAsync(payload);
 
     //tokeni email keyiyle redise kaydettik
-    await this.redis.set(user.email, accessToken);
+    await this.cacheManager.set(user.email, accessToken, TimeInSeconds);
 
     return {
       message: 'Login successful',
@@ -96,8 +99,8 @@ export class AuthenticationService {
   }
 
   async logout(token: string, userEmail: string) {
-    const tokenCache = await this.redis.get(userEmail);
-    if (tokenCache && tokenCache === token) await this.redis.del(userEmail);
+    const tokenCache = await this.cacheManager.get(userEmail);
+    if (tokenCache && tokenCache === token) await this.cacheManager.del(userEmail);
     return { message: 'Logout successful' };
   }
 }

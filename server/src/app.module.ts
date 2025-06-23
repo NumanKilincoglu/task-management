@@ -7,12 +7,21 @@ import { UsersModule } from './modules/users/users.module';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { MongoModule } from './database/mongo/mongo.module';
 import { FileUploadModule } from './modules/files/file-upload.module';
-import { RedisModule } from './database/redis/redis.module';
 import { LogModule } from './modules/logs/log.module';
 import { SchedulerModule } from './modules/scheduler/schedule.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
   imports: [
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useFactory: () => ({
+        store: redisStore,
+        url: process.env.REDIS_URL,
+        ttl: 500,
+      }),
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
@@ -22,7 +31,6 @@ import { SchedulerModule } from './modules/scheduler/schedule.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '24h' },
     }),
-    RedisModule,
     MongoModule,
     KnexModule,
     AuthenticationModule,

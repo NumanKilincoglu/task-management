@@ -1,19 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { KnexService } from 'src/database/knex/knex.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { FilterTaskDto } from './dto/filter-task.dto';
-import { InjectRedis } from '@nestjs-modules/ioredis';
-import Redis from 'ioredis';
 import { LogService } from '../logs/log.service';
 import { MailService } from '../mails/mail.service';
 import { TaskResponseDto } from './dto/task-response.dto';
 import { TasksResponseDto } from './dto/tasks-response.dto';
 import { BaseResponseDto } from 'src/common/dto/base-response.dto';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 //cache timing
-const secondsTenRedis = 10;
-const secondsOneRedis = 1;
+const MS_500 = 500;
 
 @Injectable()
 export class TasksService {
@@ -21,12 +20,12 @@ export class TasksService {
     private readonly knexService: KnexService,
     private readonly logService: LogService,
     private readonly mailService: MailService,
-    @InjectRedis() private readonly redis: Redis,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async getTaskById(id: number, userId: number): Promise<TaskResponseDto> {
     const cacheKey = `task:${userId}:${id}`;
-    const cached = await this.redis.get(cacheKey);
+    const cached = await this.cacheManager.get<string>(cacheKey);
 
     if (cached) return { success: true, task: JSON.parse(cached) };
 
@@ -46,7 +45,7 @@ export class TasksService {
       task.attachment_url = `${baseUrl}/${task.file_path}`;
     }
 
-    await this.redis.set(cacheKey, JSON.stringify(task), 'EX', secondsTenRedis);
+    await this.cacheManager.set(cacheKey, JSON.stringify(task), MS_500);
 
     return { success: true, task: task };
   }
@@ -57,7 +56,7 @@ export class TasksService {
   ): Promise<TasksResponseDto> {
     const cacheKey = `tasks:${userId}:${JSON.stringify(query)}`;
 
-    const cached = await this.redis.get(cacheKey);
+    const cached = await this.cacheManager.get<string>(cacheKey);
     if (cached) {
       return JSON.parse(cached);
     }
@@ -110,12 +109,7 @@ export class TasksService {
       },
     };
 
-    await this.redis.set(
-      cacheKey,
-      JSON.stringify(result),
-      'EX',
-      secondsOneRedis,
-    );
+    await this.cacheManager.set(cacheKey, JSON.stringify(result), MS_500);
     return result;
   }
 
@@ -156,7 +150,7 @@ export class TasksService {
     }
 
     const cacheKey = `task:${userId}:${id}`;
-    await this.redis.del(cacheKey);
+    await this.cacheManager.del(cacheKey);
 
     await this.logService.logTaskAction({
       taskId: id,
@@ -181,7 +175,7 @@ export class TasksService {
     }
 
     const cacheKey = `task:${userId}:${id}`;
-    await this.redis.del(cacheKey);
+    await this.cacheManager.del(cacheKey);
 
     await this.logService.logTaskAction({
       taskId: id,

@@ -3,16 +3,17 @@ import {
   CanActivate,
   ExecutionContext,
   UnauthorizedException,
+  Inject,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { InjectRedis } from '@nestjs-modules/ioredis';
-import Redis from 'ioredis';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class JwtGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
-    @InjectRedis() private readonly redis: Redis,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -24,7 +25,7 @@ export class JwtGuard implements CanActivate {
       }
 
       const payload = await this.jwtService.verifyAsync(token);
-      const tokenCache = await this.redis.get(payload.email);
+      const tokenCache = await this.cacheManager.get(payload.email);
       
       //redisteki tokenle ayni token olmalı jwt
       if (tokenCache !== token) {

@@ -15,11 +15,11 @@ export class KnexService implements OnModuleInit, OnModuleDestroy {
     this.knex = Knex({
       client: 'mysql2',
       connection: {
-        host: configService.get<string>('DB_HOST', 'localhost'),
-        port: configService.get<number>('DB_PORT', 3306),
-        user: configService.get<string>('DB_USER', 'root'),
-        password: configService.get<string>('DB_PASSWORD', ''),
-        database: configService.get<string>('DB_NAME', 'task_manager'),
+        host: this.configService.get<string>('DB_HOST', 'localhost'),
+        port: this.configService.get<number>('DB_PORT', 3306),
+        user: this.configService.get<string>('DB_USER', 'root'),
+        password: this.configService.get<string>('DB_PASSWORD', ''),
+        database: this.configService.get<string>('DB_NAME', 'task_manager'),
       },
       pool: {
         min: 0,

@@ -8,9 +8,20 @@ export class FileUploadService {
       throw new BadRequestException('No file uploaded');
     }
 
-    const allowedMimeTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+    const allowedMimeTypes = [
+      'image/jpeg',
+      'image/png',
+      'application/pdf',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/vnd.ms-excel',                                           
+      'application/msword',                                                 
+      'video/mp4',
+      'video/quicktime', 
+    ];
+
     if (!allowedMimeTypes.includes(file.mimetype)) {
-      throw new BadRequestException('invalid file type');
+      throw new BadRequestException('Invalid file type');
     }
 
     //Max 5MB dosya boyutu

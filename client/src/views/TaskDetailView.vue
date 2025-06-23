@@ -43,7 +43,7 @@
               <span class="label-text">Due Date</span>
             </label>
             <div class="input-wrapper">
-              <input :value="task.end_date" type="text" readonly />
+              <input :value="formatDateToInput(task.end_date ?? new Date)" type="text" readonly />
               <div class="input-icon">📅</div>
             </div>
           </div>
@@ -107,6 +107,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useTasksStore } from '../store/tasks'
 import { storeToRefs } from 'pinia'
 import { useToast } from '../composables/useToast'
+import {formatDateToInput} from "../utils/dateUtils";
 
 const route = useRoute()
 const router = useRouter()

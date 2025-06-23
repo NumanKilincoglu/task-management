@@ -108,6 +108,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useTasksStore } from '../store/tasks';
 import { useToast } from '../composables/useToast';
 import { storeToRefs } from 'pinia'
+import {formatDateToInput} from "../utils/dateUtils";
 import Dropdown from '@/components/Dropdown.vue'
 
 const tasksStore = useTasksStore()
@@ -140,17 +141,13 @@ const dateModel = computed({
     set: val => { task.value.end_date = val }
 });
 
-function formatDateToInput(date) {
-    return new Date(date).toISOString().split('T')[0]
-}
-
 async function onSubmit() {
     try {
         const payload = {
             title: task.value.title,
             description: task.value.description,
             priority: task.value.priority,
-            end_date: task.value.end_date,
+            end_date: formatDateToInput(task.value.end_date),
         };
         if (task.value.attachment) {
             payload.attachment = task.value.attachment;
@@ -160,16 +157,17 @@ async function onSubmit() {
             success('Task updated successfully!', 'Success', { duration: 3000 })
             router.push('/tasks')
         } else {
+            
             error('Failed to update task. Please try again.', 'Error', { duration: 5000 })
         }
     } catch (err) {
+        console.log(err)
         error('An unexpected error occurred while updating the task.', 'Error', { duration: 5000 })
     }
 }
 
 onMounted(() => {
     getTask();
-    task.value.end_date = formatDateToInput(new Date());
 });
 </script>
 
