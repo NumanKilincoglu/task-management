@@ -2,53 +2,41 @@
 
 Görev oluşturma, güncelleme, silme, tamamlama ve dosya yükleme işlemlerinin yapılabildiği, loglama, hatırlatma ve e-posta servisleri içeren görev yönetim sistemi.
 
----
+## 🐳 Docker ile Çalıştırma
 
-## 🚀 Kurulum ve Çalıştırma Adımları
-
-### 1. Depoyu Klonla
+### 1. Repoyu Klonla
 
 ```bash
 git clone https://github.com/NumanKilincoglu/task-management.git
 cd task-management
 ```
 
-### 2. Backend’i Başlat
-
+### 2. Docker Servislerini Başlat
 ```bash
-cd server
-npm install
-npx knex migrate:latest --knexfile knexfile.js (Knex ile MySQL tablolarını oluşturur)
-npm run start
+docker-compose up --build
 ```
 
-### 3. Frontend’i Başlat
+### 3. 🌐 Uygulama Erişim Bilgileri
 
-```bash
-cd client
-npm install
-npm run dev
-```
+| Servis      | Açıklama             | Adres                         |
+|-------------|----------------------|-------------------------------|
+| 🔵 Frontend | Vue 3 Arayüzü       | [http://localhost:5173](http://localhost:5173) |
+| 🟡 Backend  | NestJS API Sunucusu | [http://localhost:3002](http://localhost:3002) |
 
----
-
-## ⚙️ Ortam Değişkenleri (.env)
-
-`server/.env` dosyasına şunları ekleyin:
+### *** Server/.env File İçeriği ***
 
 ```env
 JWT_SECRET=6v+Ach9c8ip17uItATVeptjlpTdTCKY6w9y/HWrfafE=
-REDIS_URL=rediss://red-cn51908l6cac73a8ts80:LaryCMDZg2J5uMJ95m7C0xeaaSiodjli@oregon-keyvalue.render.com:6379
-MONGODB_URI=mongodb://localhost:27017/project-logs
-PORT=3001
-BASE_URL=http://localhost:3001
-DB_HOST=localhost
+REDIS_URL=redis://localhost:6380
+MONGODB_URI=mongodb://mongo:27017/project-logs
+PORT=3002
+BASE_URL=http://localhost:3002
+DB_HOST=db
 DB_PORT=3306
 DB_USER=root
-DB_PASSWORD=
+DB_PASSWORD=pass
 DB_NAME=task_manager
 ```
-
 ---
 
 ## Veritabanı Şeması
@@ -100,7 +88,7 @@ CREATE TABLE users (
   taskId: Number,
   userId: Number,
   action: 'created' | 'updated' | 'completed' | 'deleted',
-  changes: Object,
+  changes: String,
   createdBy: String,
   createdAt: Date
 }
@@ -124,7 +112,7 @@ CREATE TABLE users (
 - 📝 Görev CRUD işlemleri (oluşturma, güncelleme, silme, tamamlama)
 - 📁 Dosya yükleme (göreve dosya ekleme)
 - 🧠 Redis cache ile görev önbellekleme ve JWT için doğrulama
-- 📬 Son tarihi yaklaşan görevler için hatırlatma e-postaları (gerçek gönderim değil, konsola yazdırılır)
+- 📬 Son tarihi yaklaşan görevler için hatırlatma e-postaları
 - 📜 MongoDB ile görev ve e-posta işlemleri için loglama
 
 
