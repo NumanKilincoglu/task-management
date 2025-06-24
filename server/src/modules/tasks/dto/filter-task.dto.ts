@@ -3,11 +3,11 @@ import {
   IsBooleanString,
   IsDateString,
   IsIn,
-  IsNumberString,
   IsOptional,
 } from 'class-validator';
+import { BaseFilterDto } from 'src/common/dto/base-filter.dto';
 
-export class FilterTaskDto {
+export class FilterTaskDto extends BaseFilterDto {
   @IsOptional()
   @Expose({ name: 'searchQuery' })
   searchQuery?: string;
@@ -31,22 +31,4 @@ export class FilterTaskDto {
   @IsBooleanString()
   @Expose({ name: 'hasAttachment' })
   hasAttachment?: string;
-
-  @IsOptional()
-  @Expose({ name: 'orderBy' })
-  orderBy?: string;
-
-  @IsOptional()
-  @Expose({ name: 'orderDir' })
-  orderDir?: string;
-
-  @IsOptional()
-  @IsNumberString()
-  @Expose({ name: 'page' })
-  page?: string;
-
-  @IsOptional()
-  @IsNumberString()
-  @Expose({ name: 'limit' })
-  limit?: string;
 }

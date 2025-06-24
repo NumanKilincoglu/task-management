@@ -6,6 +6,18 @@
                 <button :class="{ active: activeTab === 'mail' }" @click="activeTab = 'mail'">Mail Logs</button>
                 <button :class="{ active: activeTab === 'task' }" @click="activeTab = 'task'">Task Logs</button>
             </div>
+            <div v-if="activeTab === 'mail'" class="logview-filters">
+                <Dropdown v-model="mailLogParams.status" :options="mailStatusOptions" placeholder="Status"
+                    @update:modelValue="onMailDropdownChange" />
+                <Dropdown v-model="mailLogParams.orderBy" :options="mailSortOptions" placeholder="Sort by Sent At"
+                    @update:modelValue="onMailDropdownChange" />
+            </div>
+            <div v-else class="logview-filters">
+                <Dropdown v-model="taskLogParams.action" :options="taskActionOptions" placeholder="Action"
+                    @update:modelValue="onTaskDropdownChange" />
+                <Dropdown v-model="taskLogParams.orderBy" :options="taskSortOptions" placeholder="Sort by Created At"
+                    @update:modelValue="onTaskDropdownChange" />
+            </div>
             <input v-model="searchQuery" placeholder="Search..." class="logview-search" @input="debouncedFetch" />
         </div>
 
@@ -75,20 +87,71 @@
 import { ref, watch, onMounted } from 'vue'
 import { useLogsStore } from '../store/logs'
 import PaginationBar from '@/components/PaginationBar.vue'
+import Dropdown from '@/components/Dropdown.vue'
 import { debounce } from '@/utils/helpers'
 
 const logsStore = useLogsStore()
 const activeTab = ref('mail')
 const searchQuery = ref('')
 
+const mailStatusOptions = [
+    { value: '', label: 'All Status' },
+    { value: 'sent', label: 'Sent' },
+    { value: 'failed', label: 'Failed' }
+]
+const mailSortOptions = [
+    { value: '-sentAt', label: 'Sent At Desc' },
+    { value: 'sentAt', label: 'Sent At Asc' }
+]
+const taskActionOptions = [
+    { value: '', label: 'All Actions' },
+    { value: 'created', label: 'Created' },
+    { value: 'updated', label: 'Updated' },
+    { value: 'completed', label: 'Completed' },
+    { value: 'deleted', label: 'Deleted' }
+]
+const taskSortOptions = [
+    { value: '-createdAt', label: 'Created At Desc' },
+    { value: 'createdAt', label: 'Created At Asc' }
+]
+
+const mailLogParams = ref({
+    page: 1,
+    limit: 10,
+    status: '',
+    search: '',
+    orderBy: '-sentAt'
+})
+const taskLogParams = ref({
+    page: 1,
+    limit: 10,
+    action: '',
+    search: '',
+    orderBy: '-createdAt'
+})
+
+function updateParams() {
+    mailLogParams.value.page = logsStore.metaData.page
+    mailLogParams.value.limit = logsStore.metaData.limit
+    mailLogParams.value.search = searchQuery.value
+    taskLogParams.value.page = logsStore.metaData.page
+    taskLogParams.value.limit = logsStore.metaData.limit
+    taskLogParams.value.search = searchQuery.value
+}
+
+function filterParams(obj) {
+    return Object.fromEntries(
+        Object.entries(obj).filter(([k, v]) => v !== '' && v !== undefined && v !== null)
+    )
+}
+
 async function fetchLogs() {
-    const params = {
-        page: logsStore.metaData.page,
-        limit: logsStore.metaData.limit,
-        search: searchQuery.value
+    updateParams()
+    if (activeTab.value === 'mail') {
+        await logsStore.getMailLogs(filterParams(mailLogParams.value))
+    } else {
+        await logsStore.getTaskLogs(filterParams(taskLogParams.value))
     }
-    if (activeTab.value === 'mail') await logsStore.getMailLogs(params)
-    else await logsStore.getTaskLogs(params)
 }
 
 function changePage(page) {
@@ -98,9 +161,23 @@ function changePage(page) {
 
 const debouncedFetch = debounce(fetchLogs, 1000)
 
-watch(activeTab, () => {
+function onMailDropdownChange() {
+    logsStore.metaData.page = 1
+    fetchLogs()
+}
+function onTaskDropdownChange() {
+    logsStore.metaData.page = 1
+    fetchLogs()
+}
+
+watch(searchQuery, () => {
     logsStore.metaData.page = 1
     debouncedFetch()
+})
+
+watch(activeTab, () => {
+    logsStore.metaData.page = 1
+    fetchLogs()
 })
 
 onMounted(() => {
@@ -271,6 +348,12 @@ onMounted(() => {
 .status.failed {
     background: #fee2e2;
     color: #dc2626;
+}
+
+.logview-filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 @media (max-width: 600px) {

@@ -5,6 +5,7 @@ import { TaskLog } from 'src/database/mongo/models/task-log.schema';
 import { MailLog } from '../../database/mongo/models/mail-log.schema';
 import { CreateMailLogDto } from './dto/create-mail-log.dto';
 import { CreateTaskLogDto } from './dto/create-task-log.dto';
+import { FilterLogDto } from './dto/filter-log.dto';
 
 @Injectable()
 export class LogService {
@@ -23,21 +24,20 @@ export class LogService {
     return await newLog.save();
   }
 
-  async findAllMailLogs(query: any) {
+  async findAllMailLogs(query: FilterLogDto) {
     const page = parseInt(query.page ?? '1');
     const limit = parseInt(query.limit ?? '10');
     const offset = (page - 1) * limit;
     const filter: any = {};
 
-    if (query.search) {
-      filter.recipient = { $regex: query.search, $options: 'i' };
-    }
+    if (query.search) filter.recipient = { $regex: query.search };
+    if (query.status) filter.status = query.status;
 
     const total = await this.mailLogModel.countDocuments(filter);
 
     const logs = await this.mailLogModel
       .find(filter)
-      .sort({ sentAt: -1 })
+      .sort(query.orderBy)
       .skip(offset)
       .limit(limit)
       .exec();
@@ -54,19 +54,17 @@ export class LogService {
     };
   }
 
-  async findAllTaskLogs(query: any) {
+  async findAllTaskLogs(query: FilterLogDto) {
     const page = parseInt(query.page ?? '1');
     const limit = parseInt(query.limit ?? '10');
     const offset = (page - 1) * limit;
     const total = await this.taskLogModel.countDocuments();
     const filter: any = {};
-    if (query.search) {
-      filter.action = { $regex: query.search, $options: 'i' };
-    }
-
+    if (query.search) filter.action = { $regex: query.search };
+    if (query.action) filter.action = query.action;
     const logs = await this.taskLogModel
-      .find()
-      .sort({ sentAt: -1 })
+      .find(filter)
+      .sort(query.orderBy)
       .skip(offset)
       .limit(limit)
       .exec();

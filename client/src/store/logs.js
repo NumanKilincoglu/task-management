@@ -12,6 +12,7 @@ export const useLogsStore = defineStore('logs', () => {
     async function getMailLogs(params = {}) {
         loading.value = true
         error.value = null
+        mailLogs.value = [];
         try {
             const { data } = await axios.get('/logs/mail', { params })
             mailLogs.value = data.logs || []
@@ -26,6 +27,7 @@ export const useLogsStore = defineStore('logs', () => {
     async function getTaskLogs(params = {}) {
         loading.value = true
         error.value = null
+        taskLogs.value = [];
         try {
             const { data } = await axios.get('/logs/task', { params })
             taskLogs.value = data.logs || []
