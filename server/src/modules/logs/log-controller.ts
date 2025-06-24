@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { LogService } from './log.service';
 import { JwtGuard } from '../../common/guards/jwt.guard';
 import { FilterLogDto } from './dto/filter-log.dto';

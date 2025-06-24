@@ -18,7 +18,7 @@ export const useLogsStore = defineStore('logs', () => {
             mailLogs.value = data.logs || []
             metaData.value = data.meta || { total: 0, page: 1, limit: 10, totalPages: 1 }
         } catch (err) {
-            error.value = err.message || 'Failed to fetch mail logs'
+            error.value = err.response?.data?.message || 'Failed to fetch mail logs'
         } finally {
             loading.value = false
         }
@@ -33,7 +33,7 @@ export const useLogsStore = defineStore('logs', () => {
             taskLogs.value = data.logs || []
             metaData.value = data.meta || { total: 0, page: 1, limit: 10, totalPages: 1 }
         } catch (err) {
-            error.value = err.message || 'Failed to fetch task logs'
+            error.value = err.response?.data?.message || 'Failed to fetch task logs'
         } finally {
             loading.value = false
         }
